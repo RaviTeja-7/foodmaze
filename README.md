@@ -10,7 +10,7 @@
 - Ensures scalability and maintainability for enterprise-level applications.  
 
 ## Team Members  
-- Anushka Nallapu -   
+- Anushka Nallapu   
 - Arpita Palakshappa Mudegoudar
 - Havirbhavi Pothugunta  
 - Chandu Somineni  
