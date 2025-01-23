@@ -1,7 +1,8 @@
 # FoodMaze
 
 ## Project Description  
-**FoodMaze** is a web-based application designed to simplify the food ordering process. The platform allows users to browse, select, and order food items from local vendors while providing administrators with tools to manage products and orders.  
+**FoodMaze** is a web-based application designed to simplify the food ordering process. The platform allows users to browse, select, and order food items from local vendors while providing administrators with tools to manage products and orders.
+The user interface will be developed using Bootstrap 5 to ensure a modern, responsive, and intuitive design for both users and administrators.  
 
 ## Programming Language  
 **Java**  
