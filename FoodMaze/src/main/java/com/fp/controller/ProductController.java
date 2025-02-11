@@ -33,4 +33,19 @@ public class ProductController {
 	public ResponseEntity<String> deleteProductByCode(@RequestHeader(value = "code") int code) {
 		return productService.deleteProductByCode(code);
 	}
+  
+	@GetMapping
+	public ResponseEntity<List<Product>> fetchAllProducts() {
+		return productService.fetchAllProducts();
+	}
+
+	@GetMapping(value = "/code")
+	public ResponseEntity<Product> fetchProductByCode(@RequestHeader(value = "code") int code) {
+		return productService.fetchProductByCode(code);
+	}
+	@GetMapping(value = "/category")
+	public ResponseEntity<List<Product>> fetchByCategory(@RequestHeader(value = "category") String category) {
+		return productService.fetchByCategory(category);
+	}
+
 }
