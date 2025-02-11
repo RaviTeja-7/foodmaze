@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css" rel="stylesheet">
+    <link href="styles/global.css" rel="stylesheet">
+    <link href="styles/header.css" rel="stylesheet">
+
+    <style>
+        .menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .menu-card {
+            width: 700px;
+            gap: 1rem;
+        }
+
+        .card-body {
+            display: flex;
+        }
+
+        .image {
+            min-width: 150px;
+            min-height: 150px;
+            max-width: 150px;
+            max-height: 150px;
+        }
+
+        .card-text {
+            /* ellipsis after 2 lines*/
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            text-overflow: ellipsis;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-details {
+            padding: 0;
+            margin: 0;
+            font-size: 0.8rem;
+        }
+
+
+        .format {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .add-remove {
+            display: none;
+            align-items: center;
+        }
+
+        .add-remove button {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .count {
+            padding: 0 .5rem;
+            font-weight: 700;
+        }
+
+        /* cart data at bottom right */
+        .cart-data {
+            position: fixed;
+            width: 100px;
+            border-radius: 10px;
+            bottom: 1rem;
+            right: 1rem;
+        }
+
+        .cart-data span {
+            position: absolute;
+            bottom: 75%;
+            left: 85%;
+            background-color: var(--primary);
+            border-radius: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .menu-item {
+            width: 100%;
+        }
+
+        .image img {
+            width: 100%;
+            aspect-ratio: 1/1;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="container mt-5 floating-header">
+            <div class="row justify-content-md-center m-1">
+                <h1 class="text-center project-name">Food Maze</h1>
+                <ul>
+                    <li><a href="home.html" class="active">Home</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container menu-card-container d-flex justify-content-center">
+        <div class="row m-1 p-md-5 p-2 menu-card ">
+            <h2 class="text-center">Menu Card</h2>
+            <div class="format">
+                <select class="form-select" id="sort" aria-label="Default select example">
+                    <option selected disabled>Sort by</option>
+                    <option value="price-asc">Price ↓</option>
+                    <option value="price-desc">Price ↑</option>
+                    <option value="productName-asc">Name ↓</option>
+                    <option value="productName-desc">Name ↑</option>
+                </select>
+                <select class="form-select" id="category" aria-label="Default select example">
+                    <option selected disabled>Choose Category</option>
+                </select>
+            </div>
+            <div class="input-group align-items-center search-input">
+                <span class="input-group-text">&nbsp;<i class="fa-duotone fa-magnifying-glass"></i>&nbsp;</span>
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="Search..." required>
+            </div>
+            <div class="menu">
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-data">
+        <span class="cart-counter"></span>
+        <button class="btn btn-dark add-cart" onclick="window.location.href='cart.html'">Go to Cart</button>
+    </div>
+
+    <template id="menu-item-template">
+        <div class="card menu-item">
+            <div class="card-body">
+                <div class="image">
+                    <img src="https://via.placeholder.com/150" class="card-img-top" alt="...">
+                </div>
+                <div class="content ps-3">
+                    <div class="card-content-top">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Card text</p>
+                        <p class="card-details text-secondary"></p>
+                    </div>
+                    <div class="card-content-bottom">
+                        <button type="submit" class="btn btn-dark add-cart">Add to Cart</button>
+                        <div class="add-remove">
+                            <button type="button" class="btn btn-dark dec-count">-</button>
+                            <span class="count">1</span>
+                            <button type="button" class="btn btn-dark inc-count">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="scripts/script.js"></script>
+    <script>
+        let items = [];
+        let itemsMap = {};
+        let cart = {};
+        let sortBy;
+        let category;
+        let searchKey;
+        const categories = new Set();
+        axios.get(URL_MAP.product)
+            .then((response) => {
+                items = response.data;
+                fillData(items);
+                items.forEach((item) => {
+                    itemsMap[item.productCode] = item;
+                    categories.add(item.category);
+                });
+                categories.add('All');
+                categories.forEach((category) => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    document.getElementById('category').appendChild(option);
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+        const fillData = (itemsData) => {
+            const template = document.getElementById('menu-item-template');
+            document.querySelector('.menu').innerHTML = '';
+            itemsData.forEach((item) => {
+                const cardItem = template.content.cloneNode(true);
+                cardItem.querySelector('.card-title').textContent = item.productName;
+                cardItem.querySelector('.card-text').textContent = item.productDesc;
+                cardItem.querySelector('.card-details').textContent = `Price: $ ${item.price} | MFD: ${item.mfgDate} | EXP: ${item.expDate}`;
+                cardItem.querySelector('.add-cart').classList.add(`add-cart-${item.productCode}`);
+                cardItem.querySelector('.add-remove').classList.add(`add-remove-${item.productCode}`);
+                cardItem.querySelector('.dec-count').classList.add(`dec-count-${item.productCode}`);
+                cardItem.querySelector('.inc-count').classList.add(`inc-count-${item.productCode}`);
+                cardItem.querySelector('.count').classList.add(`count-${item.productCode}`);
+                cardItem.querySelector('.image img').src = `data:image/png;base64,${item.image}`;
+
+                cardItem.querySelector('.add-cart').addEventListener('click', () => {
+                    onAddToCart(item.productCode);
+                });
+                cardItem.querySelector('.inc-count').addEventListener('click', () => {
+                    incCount(item.productCode);
+                });
+                cardItem.querySelector('.dec-count').addEventListener('click', () => {
+                    decCount(item.productCode);
+                });
+
+                document.querySelector('.menu').appendChild(cardItem);
+                categories.add(item.category);
+            });
+
+            setCount();
+            cartCounter();
+        }
+
+        const onAddToCart = (productCode) => {
+            document.querySelector(`.add-cart-${productCode}`).style.display = 'none';
+            document.querySelector(`.add-remove-${productCode}`).style.display = 'flex';
+            cart[productCode] = {
+                productCode,
+                count: 1
+            }
+            document.querySelector(`.count-${productCode}`).textContent = cart[productCode].count;
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            cartCounter();
+        }
+
+        const incCount = (productCode) => {
+            cart[productCode].count += 1;
+            document.querySelector(`.count-${productCode}`).textContent = cart[productCode].count;
+            if (cart[productCode].count === 10) {
+                document.querySelector(`.inc-count-${productCode}`).disabled = true;
+            }
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            cartCounter();
+        }
+
+        const decCount = (productCode) => {
+            cart[productCode].count -= 1;
+            document.querySelector(`.count-${productCode}`).textContent = cart[productCode].count;
+            if (cart[productCode].count === 0) {
+                document.querySelector(`.add-remove-${productCode}`).style.display = 'none';
+                document.querySelector(`.add-cart-${productCode}`).style.display = 'block';
+                delete cart[productCode];
+            }
+            document.querySelector(`.inc-count-${productCode}`).disabled = false;
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            cartCounter();
+        }
+
+        document.getElementById('sort').addEventListener('change', (e) => {
+            const sortValue = e.target.value;
+            sortBy = sortValue;
+            filterItems();
+        });
+
+        document.getElementById('category').addEventListener('change', (e) => {
+            const categoryValue = e.target.value;
+            category = categoryValue;
+            filterItems();
+        });
+
+        document.querySelector('.search-input input').addEventListener('input', (e) => {
+            const searchValue = e.target.value;
+            searchKey = searchValue;
+            filterItems();
+        });
+
+        const filterItems = () => {
+            let filteredItems = JSON.parse(JSON.stringify(items));
+            if (sortBy) {
+                const [key, order] = sortBy.split('-');
+                filteredItems = filteredItems.sort((a, b) => {
+                    if (order === 'asc') {
+                        return key == 'price' ? a[key] - b[key] : a[key].localeCompare(b[key]);
+                    } else {
+                        return key == 'price' ? b[key] - a[key] : b[key].localeCompare(a[key]);
+                    }
+                });
+            }
+            if (category) {
+                filteredItems = filteredItems.filter((item) => item.category === category || category === 'All');
+            }
+
+            if (searchKey) {
+                filteredItems = filteredItems.filter((item) => item.productName.toLowerCase().includes(searchKey.toLowerCase()));
+            }
+            fillData(filteredItems);
+        }
+
+        const setCount = () => {
+            const cartData = JSON.parse(sessionStorage.getItem('cart'));
+            if (cartData) {
+                cart = cartData;
+                Object.keys(cart).forEach((productCode) => {
+                    document.querySelector(`.add-cart-${productCode}`).style.display = 'none';
+                    document.querySelector(`.add-remove-${productCode}`).style.display = 'flex';
+                    document.querySelector(`.count-${productCode}`).textContent = cart[productCode].count;
+                });
+            }
+        }
+
+        const cartCounter = () => {
+            let count = 0;
+            Object.keys(cart).forEach((productCode) => {
+                count += cart[productCode].count;
+            });
+            if (count === 0) {
+                document.querySelector('.cart-data').style.display = 'none';
+            } else {
+                document.querySelector('.cart-data').style.display = 'block';
+            }
+            document.querySelector('.cart-counter').textContent = count;
+
+        }
+    </script>
+</body>
+
+</html>
