@@ -1,0 +1,33 @@
+body {
+    --primary: #FFF;
+    --secondary: #F0F0F0;
+    --accent: #000;
+    background-image: url("../bg.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
+}
+
+html,
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+a {
+    color: var(--primary) !important;
+    cursor: pointer;
+}
+
+a:hover {
+    color: var(--accent) !important;
+}
