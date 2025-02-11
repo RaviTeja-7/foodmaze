@@ -1,0 +1,51 @@
+.header {
+    position: sticky;
+    z-index: 2;
+    top: 0;
+    transition: background-color 0.5s;
+}
+
+.header.black {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.floating-header {
+    background-color: rgba(0, 0, 0, 0.25);
+    border-radius: 25px;
+}
+
+ul {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    padding: 0;
+    max-width: 600px !important;
+}
+
+ul li {
+    margin: 0 10px;
+    text-align: center;
+}
+
+ul li a {
+    text-decoration: none;
+    color: var(--primary);
+    transition: .3s;
+    display: block;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+}
+
+ul li a:hover {
+    color: var(--primary) !important;
+    box-shadow: 0 3px 0 var(--primary);
+}
+
+ul li a.active {
+    box-shadow: 0 3px 0 var(--primary);
+}
+
+.project-name {
+    color: var(--primary);
+}

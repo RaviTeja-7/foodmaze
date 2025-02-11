@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link href="styles/global.css" rel="stylesheet">
+    <link href="styles/header.css" rel="stylesheet">
+    <style>
+        .admin-card {
+            width: 700px;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: var(--accent);
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+        }
+
+        .nav-link.active {
+            font-weight: 600;
+        }
+
+        .toast-success {
+            background-color: #000 !important;
+        }
+
+        .new-box .mb-3,
+        .product-details {
+            text-align: left;
+        }
+
+        .update-div {
+            gap: 1rem;
+            display: none;
+        }
+
+        .product-details {
+            display: none;
+        }
+
+        .update-div button {
+            width: 100%;
+        }
+
+        .product-details p {
+            margin-bottom: .5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container mt-5 floating-header">
+            <div class="row justify-content-md-center m-1">
+                <h1 class="text-center project-name"></h1>
+                <ul>
+                    <li><a href="admin.html" class="active">Manage</a></li>
+                    <li><a href="adminOrders.html">Orders</a></li>
+                    <li><a href="logout.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container admin-container d-flex justify-content-center">
+        <div class="row m-1 p-md-5 p-2 admin-card">
+            <h2 class="text-center mb-3">Manage Products</h2>
+            <div class="admin">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="new-tab" data-bs-toggle="tab" data-bs-target="#new-tab-pane" type="button"
+                                    role="tab" aria-controls="new-tab-pane" aria-selected="true">Add New Product login</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="update-tab" data-bs-toggle="tab" data-bs-target="#update-tab-pane"
+                                    onclick="showProducts()" type="button" role="tab" aria-controls="update-tab-pane"
+                                    aria-selected="false">Update Products</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade  show active" id="new-tab-pane" role="tabpanel" aria-labelledby="new-tab" tabindex="0">
+                                <div class="new-box mt-4">
+                                    <form id="new-form" class="d-flex justify-content-center text-center flex-column">
+                                        <p class="text-danger-emphasis" id="error-msg"></p>
+                                        <div class="mb-3">
+                                            <label for="productName" class="form-label">Product Name</label>
+                                            <input type="text" class="form-control" id="productName" placeholder="Product Name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="productDesc" class="form-label">Product Description</label>
+                                            <input type="text" class="form-control" id="productDesc" placeholder="Product Description" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Category</label>
+                                            <input type="text" class="form-control" id="category" placeholder="Category" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="price" class="form-label">Price</label>
+                                            <input type="text" class="form-control" id="price" placeholder="Price" required
+                                                pattern="^\d+(\.\d{1,2})?$" title="Price should be a number with up to 2 decimal places">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="mfgDate" class="form-label">Manufacturing Date</label>
+                                            <input type="date" class="form-control" id="mfgDate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="expDate" class="form-label">Expiry Date</label>
+                                            <input type="date" class="form-control" id="expDate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="image" class="form-label">Image</label>
+                                            <input type="file" class="form-control" id="image" required accept="image/*">
+                                        </div>
+                                        <button type="submit" class="btn btn-dark ews-bt" name="Add Product">Add Product</button><br><br>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="update-tab-pane" role="tabpanel" aria-labelledby="update-tab" tabindex="0">
+                                <div class="update-box mt-4">
+                                    <form id="update-form" class="d-flex justify-content-center text-center flex-column">
+                                        <select class="form-select form-select-sm mb-3" id="products" aria-label="Product select"
+                                            onchange="showProduct()">
+                                            <option selected disabled>Open this select menu</option>
+                                        </select>
+                                        <div class="product-details">
+                                            <p>
+                                                <b>Product Name:</b>
+                                                <span id="productName-1"></span>
+                                            </p>
+                                            <p>
+                                                <b>Product Description:</b>
+                                                <span id="productDesc-1"></span>
+                                            </p>
+                                            <p>
+                                                <b>Category:</b>
+                                                <span id="category-1"></span>
+                                            </p>
+                                            <p>
+                                                <b>Manufacturing Date:</b>
+                                                <span id="mfgDate-1"></span>
+                                            </p>
+                                            <p>
+                                                <b>Expiry Date:</b>
+                                                <span id="expDate-1"></span>
+                                            </p>
+                                            <div class="mb-3">
+                                                <label for="price" class="form-label"><b>Price</b></label>
+                                                <input type="text" class="form-control" id="price-1" placeholder="Price" required
+                                                    pattern="^\d+(\.\d{1,2})?$" title="Price should be a number with up to 2 decimal places">
+                                            </div>
+                                        </div>
+                                        <div class="update-div justify-content-center">
+                                            <button type="submit" class="btn btn-outline-dark ews-bt" name="delete" id="deleteProduct">Delete
+                                                Product</button>
+                                            <button type="submit" class="btn btn-dark ews-bt" name="update" id="updateProduct"
+                                                disabled>Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="scripts/script.js"></script>
+    <script>
+        let products;
+        let selectedProductCode;
+        async function encodeImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const base64String = btoa(reader.result);
+                    resolve(base64String);
+                };
+                reader.onerror = error => {
+                    reject(error);
+                };
+                reader.readAsBinaryString(file);
+            });
+        }
+
+        document.getElementById('new-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                productName: document.getElementById('productName').value,
+                productDesc: document.getElementById('productDesc').value,
+                category: document.getElementById('category').value,
+                price: document.getElementById('price').value,
+                mfgDate: document.getElementById('mfgDate').value,
+                expDate: document.getElementById('expDate').value,
+                image: await encodeImageToBase64(document.getElementById('image').files[0])
+            };
+            console.log(data);
+            axios.post(URL_MAP.product, data).then((response) => {
+                toastr.success('Product added successfully');
+                document.getElementById('new-form').reset();
+            });
+        });
+
+        function showProduct() {
+            const selectedProduct = document.querySelector('#products').value;
+            selectedProductCode = selectedProduct;
+            const product = products.find(product => product.productCode == selectedProduct);
+            const productDetails = document.querySelector('.product-details');
+            productDetails.style.display = 'block';
+            document.getElementById('productName-1').innerText = product.productName;
+            document.getElementById('productDesc-1').innerText = product.productDesc;
+            document.getElementById('category-1').innerText = product.category;
+            document.getElementById('mfgDate-1').innerText = product.mfgDate;
+            document.getElementById('expDate-1').innerText = product.expDate;
+            document.getElementById('price-1').value = product.price;
+
+            const updateDiv = document.querySelector('.update-div');
+            updateDiv.style.display = 'flex';
+            document.getElementById('updateProduct').disabled = true;
+
+        }
+
+
+        function showProducts() {
+            axios.get(URL_MAP.product).then((response) => {
+                products = response.data;
+                const select = document.querySelector('#products');
+                select.innerHTML = '<option selected disabled>Open this select menu</option>';
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.productCode;
+                    option.text = product.productName + ' - ' + product.price
+                    select.appendChild(option);
+                });
+            });
+        }
+        showProducts();
+
+        document.getElementById('update-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const price = document.getElementById('price-1').value;
+            const headers = {
+                code: selectedProductCode,
+                productPrice: price
+            };
+            axios.put(URL_MAP.updateProduct, null, { headers: headers })
+                .then((response) => {
+                    toastr.success('Product updated successfully');
+                });
+        });
+
+        document.getElementById('deleteProduct').addEventListener('click', (e) => {
+            e.preventDefault();
+            const headers = {
+                code: selectedProductCode
+            };
+            axios.delete(URL_MAP.deleteProduct, { headers })
+                .then((response) => {
+                    toastr.success('Product deleted successfully');
+                    showProducts();
+                    document.querySelector('.product-details').style.display = 'none';
+                    document.querySelector('.update-div').style.display = 'none';
+                });
+        });
+
+        document.getElementById('price-1').addEventListener('input', (e) => {
+            if (e.target.value) {
+                document.getElementById('updateProduct').disabled = false;
+            } else {
+                document.getElementById('updateProduct').disabled = true;
+            }
+        });
+    </script>
+</body>
+
+</html>
