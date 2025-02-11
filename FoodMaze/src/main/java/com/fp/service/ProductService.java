@@ -32,6 +32,7 @@ public class ProductService {
 		productRepository.deleteByProductCode(code);
 		return new ResponseEntity<String>("Delete Entry with Id " + code, HttpStatus.OK);
 	}
+
 	public ResponseEntity<List<Product>> fetchAllProducts() {
 		return new ResponseEntity<List<Product>>((List<Product>) productRepository.findAll(), HttpStatus.OK);
 	}
@@ -43,4 +44,5 @@ public class ProductService {
 		return new ResponseEntity<List<Product>>(productRepository.findByCategory(category), HttpStatus.OK);
 
 	}
+
 }
