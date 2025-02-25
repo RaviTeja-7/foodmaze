@@ -1,6 +1,6 @@
 package com.fp.controller;
 
-//import java.time.LocalDate;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -38,5 +38,15 @@ public class OrderController {
 	@GetMapping(value = "/id")
 	public ResponseEntity<Orders> fetchOrderById(@RequestHeader(value = "id") int id) {
 		return orderService.fetchOrderById(id);
+	}
+	
+	@GetMapping(value = "/userId")
+	public ResponseEntity<List<Orders>> fetchOrderbyUserId(@RequestHeader(value = "userId") int id) {
+		return orderService.fetchOrderbyUserId(id);
+	}
+
+	@GetMapping(value = "/date")
+	public ResponseEntity<List<Orders>> fetchOrderByOrderDate(@RequestHeader(value = "orderDate") LocalDate orderDate) {
+		return orderService.fetchOrderByOrderDate(orderDate);
 	}
 }

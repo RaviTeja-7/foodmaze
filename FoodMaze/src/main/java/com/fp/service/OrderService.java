@@ -47,5 +47,11 @@ public class OrderService {
 		return new ResponseEntity<Orders>(orderRepo.findById(id), HttpStatus.OK);
 	}
 	
-	
+	public ResponseEntity<List<Orders>> fetchOrderbyUserId(int id) {
+		return new ResponseEntity<List<Orders>>(orderRepo.findByUserId(id), HttpStatus.OK);
+	}
+
+	public ResponseEntity<List<Orders>> fetchOrderByOrderDate(LocalDate orderDate) {
+		return new ResponseEntity<List<Orders>>(orderRepo.findByOrderDate(orderDate), HttpStatus.OK);
+	}
 }
