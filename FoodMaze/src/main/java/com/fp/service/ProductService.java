@@ -1,7 +1,7 @@
 package com.fp.service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,5 +44,12 @@ public class ProductService {
 		return new ResponseEntity<List<Product>>(productRepository.findByCategory(category), HttpStatus.OK);
 
 	}
-
+	@Transactional
+	public ResponseEntity<String> updatePrice(@RequestParam(name = "orderPrice") double orderPrice,
+			@RequestParam(name = "code") int code) {
+		Product product = productRepository.findByProductCode(code);
+		product.setPrice(orderPrice);
+		productRepository.save(product);
+		return new ResponseEntity<String>("Price updated successfully!", HttpStatus.OK);
+	}
 }
