@@ -43,5 +43,9 @@ public class OrderService {
 		return new ResponseEntity<List<Orders>>(orderRepo.findAll(), HttpStatus.OK);
 	}
 	
+	public ResponseEntity<Orders> fetchOrderById(int id) {
+		return new ResponseEntity<Orders>(orderRepo.findById(id), HttpStatus.OK);
+	}
+	
 	
 }
