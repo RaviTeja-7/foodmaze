@@ -1,10 +1,10 @@
 package com.fp.controller;
 
 //import java.time.LocalDate;
-//import java.util.List;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,5 +28,10 @@ public class OrderController {
 	@PostMapping
 	public ResponseEntity<String> createOrder(@RequestBody Orders order) {
 		return orderService.createOrder(order);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<Orders>> fetchAllOrders() {
+		return orderService.fetchAllOrders();
 	}
 }

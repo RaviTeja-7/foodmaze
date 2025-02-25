@@ -12,7 +12,7 @@ import com.fp.entity.User;
 import com.fp.repository.OrderRepo;
 import com.fp.repository.UserRepo;
 
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 
 @Service
 public class OrderService {
@@ -38,4 +38,10 @@ public class OrderService {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body("Failed to create order: User not found or request failed");
 	}
+	
+	public ResponseEntity<List<Orders>> fetchAllOrders() {
+		return new ResponseEntity<List<Orders>>(orderRepo.findAll(), HttpStatus.OK);
+	}
+	
+	
 }
