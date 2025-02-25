@@ -44,6 +44,7 @@ public class ProductService {
 		return new ResponseEntity<List<Product>>(productRepository.findByCategory(category), HttpStatus.OK);
 
 	}
+
 	@Transactional
 	public ResponseEntity<String> updatePrice(@RequestParam(name = "orderPrice") double orderPrice,
 			@RequestParam(name = "code") int code) {
@@ -52,4 +53,14 @@ public class ProductService {
 		productRepository.save(product);
 		return new ResponseEntity<String>("Price updated successfully!", HttpStatus.OK);
 	}
+
+
+	@RequestParam(name = "uprice") double uprice) {
+		List<Product> filteredList = ((List<Product>) productRepository.findAll()).stream()
+				.filter(product -> (product.getPrice() > lprice && product.getPrice() < uprice))
+				.collect(Collectors.toList());
+		return new ResponseEntity<List<Product>>(filteredList, HttpStatus.OK);
+	}
+
+
 }

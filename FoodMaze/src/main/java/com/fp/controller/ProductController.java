@@ -40,11 +40,22 @@ public class ProductController {
 		return productService.fetchAllProducts();
 	}
 
+
 	@PutMapping(value = "/code/price")
 	public ResponseEntity<String> updatePrice(@RequestHeader(value = "productPrice") double orderPrice,
 			@RequestHeader(value = "code") int code) {
 		return productService.updatePrice(orderPrice, code);
 	}
+
+
+	@GetMapping(value = "/price")
+	public ResponseEntity<List<Product>> fetchByPriceRange(@RequestHeader(value = "lprice") double lprice,
+			@RequestHeader(value = "uprice") double uprice) {
+		return productService.fetchByPriceRange(lprice, uprice);
+	}
+	
+
+
 	@GetMapping(value = "/code")
 	public ResponseEntity<Product> fetchProductByCode(@RequestHeader(value = "code") int code) {
 		return productService.fetchProductByCode(code);
