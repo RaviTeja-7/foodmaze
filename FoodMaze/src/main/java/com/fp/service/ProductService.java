@@ -54,7 +54,7 @@ public class ProductService {
 		return new ResponseEntity<String>("Price updated successfully!", HttpStatus.OK);
 	}
 
-
+	public ResponseEntity<List<Product>> fetchByPriceRange(@RequestParam(name = "lprice") double lprice,
 	@RequestParam(name = "uprice") double uprice) {
 		List<Product> filteredList = ((List<Product>) productRepository.findAll()).stream()
 				.filter(product -> (product.getPrice() > lprice && product.getPrice() < uprice))
