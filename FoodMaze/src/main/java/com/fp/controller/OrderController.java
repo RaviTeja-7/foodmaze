@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,5 +48,11 @@ public class OrderController {
 	@GetMapping(value = "/date")
 	public ResponseEntity<List<Orders>> fetchOrderByOrderDate(@RequestHeader(value = "orderDate") LocalDate orderDate) {
 		return orderService.fetchOrderByOrderDate(orderDate);
+	}
+	
+	@PutMapping(value = "/status")
+	public ResponseEntity<String> updateOrderStatus(@RequestHeader(value = "id") int id,
+			@RequestHeader(value = "status") String status) {
+		return orderService.updateOrderStatus(id, status);
 	}
 }
