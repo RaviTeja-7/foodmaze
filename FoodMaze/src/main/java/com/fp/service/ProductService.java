@@ -1,7 +1,7 @@
 package com.fp.service;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -54,11 +54,13 @@ public class ProductService {
 		return new ResponseEntity<String>("Price updated successfully!", HttpStatus.OK);
 	}
 
+
 	@RequestParam(name = "uprice") double uprice) {
 		List<Product> filteredList = ((List<Product>) productRepository.findAll()).stream()
 				.filter(product -> (product.getPrice() > lprice && product.getPrice() < uprice))
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<Product>>(filteredList, HttpStatus.OK);
 	}
+
 
 }

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,12 +47,14 @@ public class ProductController {
 		return productService.updatePrice(orderPrice, code);
 	}
 
+
 	@GetMapping(value = "/price")
 	public ResponseEntity<List<Product>> fetchByPriceRange(@RequestHeader(value = "lprice") double lprice,
 			@RequestHeader(value = "uprice") double uprice) {
 		return productService.fetchByPriceRange(lprice, uprice);
 	}
 	
+
 
 	@GetMapping(value = "/code")
 	public ResponseEntity<Product> fetchProductByCode(@RequestHeader(value = "code") int code) {
