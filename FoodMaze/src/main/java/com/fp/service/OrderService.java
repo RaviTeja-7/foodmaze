@@ -12,7 +12,7 @@ import com.fp.entity.User;
 import com.fp.repository.OrderRepo;
 import com.fp.repository.UserRepo;
 
-//import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 @Service
 public class OrderService {
@@ -53,5 +53,13 @@ public class OrderService {
 
 	public ResponseEntity<List<Orders>> fetchOrderByOrderDate(LocalDate orderDate) {
 		return new ResponseEntity<List<Orders>>(orderRepo.findByOrderDate(orderDate), HttpStatus.OK);
+	}
+	
+	@Transactional
+	public ResponseEntity<String> updateOrderStatus(int id, String status) {
+		Orders order = orderRepo.findById(id);
+		order.setStatus(status);
+		orderRepo.save(order);
+		return new ResponseEntity<String>("Order Status Updated Successfully!", HttpStatus.OK);
 	}
 }
