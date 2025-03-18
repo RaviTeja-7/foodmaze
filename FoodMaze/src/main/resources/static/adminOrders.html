@@ -90,53 +90,160 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="scripts/script.js"></script>
-    <script>
-        (async () => {
+	<script>
+	    (async () => {
+	        const headers = {
+	            userId: sessionStorage.getItem('userId')
+	        }
+	        const orders = await axios.get(URL_MAP.createOrder);
+	        const orderTemplate = document.getElementById('order-template');
+	        const ordersContainer = document.querySelector('.orders');
 
-            const headers = {
-                userId: sessionStorage.getItem('userId')
-            }
-            const orders = await axios.get(URL_MAP.createOrder);
-            const orderTemplate = document.getElementById('order-template');
-            const ordersContainer = document.querySelector('.orders');
-            // sort order.data by orderId descending
-            orders.data.sort((a, b) => b.orderId - a.orderId);
-            let isFlag = true;
-            orders.data.forEach(order => {
-                const orderElement = orderTemplate.content.cloneNode(true);
-                orderElement.querySelector('.order-id').innerText = order.orderId;
-                orderElement.querySelector('.order-total').innerText = `$${order.total_amt}`;
-                orderElement.querySelector('.order-address').innerText = order.customerAddress;
-                orderElement.querySelector('.order-date').innerText = order.orderDate;
-                orderElement.querySelector('.customer-name').innerText = order.customerName;
-                orderElement.querySelector('.customer-phone').innerText = order.customerPhone;
-                const orderItems = orderElement.querySelector('.order-items');
-                const orderItemsArray = order.orderName.split(';');
-                const orderQtyArray = order.qty.split(';');
-                orderItemsArray.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.innerText = `${item} x ${orderQtyArray[index]}`;
-                    orderItems.appendChild(li);
-                });
-                orderElement.querySelector('.accordion-header').setAttribute('id', `heading${order.orderId}`);
-                orderElement.querySelector('.accordion-button').setAttribute('data-bs-target', `#collapse${order.orderId}`);
-                orderElement.querySelector('.accordion-button').setAttribute('aria-controls', `collapse${order.orderId}`);
-                orderElement.querySelector('.accordion-collapse').setAttribute('id', `collapse${order.orderId}`);
-                orderElement.querySelector('.accordion-collapse').setAttribute('aria-labelledby', `collapse${order.orderId}`);
-                orderElement.querySelector('.accordion-collapse').setAttribute('data-bs-parent', '#orders-accordion');
-                if (isFlag) {
-                    orderElement.querySelector('.accordion-button').classList.remove('collapsed');
-                    orderElement.querySelector('.accordion-button').setAttribute('aria-expanded', 'true');
-                    orderElement.querySelector('.accordion-collapse').classList.add('show');
-                    isFlag = false;
-                } else {
-                    orderElement.querySelector('.accordion-button').setAttribute('aria-expanded', 'false');
-                }
-                ordersContainer.appendChild(orderElement);
-            });
-        })();
-    </script>
+	        // Sort orders by orderId descending
+	        orders.data.sort((a, b) => b.orderId - a.orderId);
 
+	        let isFlag = true;
+	        orders.data.forEach(order => {
+	            const orderElement = orderTemplate.content.cloneNode(true);
+	            orderElement.querySelector('.order-id').innerText = order.orderId;
+	            orderElement.querySelector('.order-total').innerText = `$${order.total_amt}`;
+	            orderElement.querySelector('.order-address').innerText = order.customerAddress;
+	            orderElement.querySelector('.order-date').innerText = order.orderDate;
+	            orderElement.querySelector('.customer-name').innerText = order.customerName;
+	            orderElement.querySelector('.customer-phone').innerText = order.customerPhone;
+
+	            // Add Order Items
+	            const orderItems = orderElement.querySelector('.order-items');
+	            const orderItemsArray = order.orderName.split(';');
+	            const orderQtyArray = order.qty.split(';');
+	            orderItemsArray.forEach((item, index) => {
+	                const li = document.createElement('li');
+	                li.innerText = `${item} x ${orderQtyArray[index]}`;
+	                orderItems.appendChild(li);
+	            });
+
+	            // Accordion settings
+	            orderElement.querySelector('.accordion-header').setAttribute('id', `heading${order.orderId}`);
+	            orderElement.querySelector('.accordion-button').setAttribute('data-bs-target', `#collapse${order.orderId}`);
+	            orderElement.querySelector('.accordion-button').setAttribute('aria-controls', `collapse${order.orderId}`);
+	            orderElement.querySelector('.accordion-collapse').setAttribute('id', `collapse${order.orderId}`);
+	            orderElement.querySelector('.accordion-collapse').setAttribute('aria-labelledby', `collapse${order.orderId}`);
+	            orderElement.querySelector('.accordion-collapse').setAttribute('data-bs-parent', '#orders-accordion');
+
+	            if (isFlag) {
+	                orderElement.querySelector('.accordion-button').classList.remove('collapsed');
+	                orderElement.querySelector('.accordion-button').setAttribute('aria-expanded', 'true');
+	                orderElement.querySelector('.accordion-collapse').classList.add('show');
+	                isFlag = false;
+	            } else {
+	                orderElement.querySelector('.accordion-button').setAttribute('aria-expanded', 'false');
+	            }
+
+	            // ✅ ADD ORDER STATUS DROPDOWN & UPDATE BUTTON
+	            const statusContainer = document.createElement("div");
+	            statusContainer.classList.add("status-container");
+
+	            // Set order background color based on status
+	            let orderColor = "";
+	            if (order.status === "Completed") {
+	                orderColor = "lightgreen";
+	            } else if (order.status === "Cancelled") {
+	                orderColor = "lightcoral";
+	            }
+
+	            orderElement.querySelector(".card").style.backgroundColor = orderColor;
+
+				statusContainer.innerHTML = `
+				    <h6 class="card-text">Order Status: 
+				        ${getStatusBadge(order.status)}
+				        ${order.status === "Completed" || order.status === "Cancelled" ? "" : `
+				            <select id="status-${order.orderId}">
+				                <option value="Pending" ${order.status === "Pending" ? "selected" : ""}>Pending</option>
+				                <option value="Completed" ${order.status === "Completed" ? "selected" : ""}>Completed</option>
+				                <option value="Cancelled" ${order.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
+				            </select>
+				            <button class="btn btn-primary btn-sm" onclick="updateOrderStatus(${order.orderId})">
+				                Update
+				            </button>
+				        `}
+				    </h6>
+				`;
+	            orderElement.querySelector(".accordion-body").appendChild(statusContainer);
+
+	            ordersContainer.appendChild(orderElement);
+	        });
+	    })();
+
+	    // ✅ Function to update order status
+		async function updateOrderStatus(orderId) {
+		    const status = document.getElementById(`status-${orderId}`).value.trim();
+		    
+		    try {
+		        const response = await axios.put(`/api/order/${orderId}/status`, `"${status}"`, {
+		            headers: { "Content-Type": "application/json" }
+		        });
+
+		        alert(response.data);
+		        location.reload(); // Refresh to apply color changes and disable dropdown after update
+				fetchAnalytics();  
+		    } catch (error) {
+		        alert("Error updating order status!");
+		    }
+		}
+		async function fetchAnalytics() {
+		    try {
+		        const response = await axios.get(URL_MAP.analytics + "?timestamp=" + new Date().getTime());
+		        const data = response.data;
+
+		        // ✅ Update Admin Dashboard UI
+		        document.getElementById("totalOrders").innerText = data.totalOrders;
+		        document.getElementById("totalRevenue").innerText = `$${data.totalRevenue.toFixed(2)}`;
+		        document.getElementById("pendingOrders").innerText = data.pendingOrders;
+		        document.getElementById("completedOrders").innerText = data.completedOrders;
+		        document.getElementById("cancelledOrders").innerText = data.cancelledOrders;
+
+		        // ✅ Destroy previous charts before re-rendering
+		        if (window.orderStatusChart) window.orderStatusChart.destroy();
+		        if (window.monthlySalesChart) window.monthlySalesChart.destroy();
+
+		        // ✅ Render Order Status Pie Chart
+		        window.orderStatusChart = new Chart(document.getElementById("orderStatusChart"), {
+		            type: "pie",
+		            data: {
+		                labels: ["Pending", "Completed", "Cancelled"],
+		                datasets: [{
+		                    data: [data.pendingOrders, data.completedOrders, data.cancelledOrders],
+		                    backgroundColor: ["yellow", "green", "red"]
+		                }]
+		            },
+		            options: { responsive: true }
+		        });
+
+		        // ✅ Render Monthly Sales Bar Chart
+		        window.monthlySalesChart = new Chart(document.getElementById("monthlySalesChart"), {
+		            type: "bar",
+		            data: {
+		                labels: Object.keys(data.monthlySales),
+		                datasets: [{
+		                    label: "Revenue ($)",
+		                    data: Object.values(data.monthlySales),
+		                    backgroundColor: "blue"
+		                }]
+		            },
+		            options: {
+		                responsive: true,
+		                scales: { y: { beginAtZero: true } }
+		            }
+		        });
+
+		    } catch (error) {
+		        console.error("Error fetching analytics data", error);
+		    }
+		}
+
+		// ✅ Run `fetchAnalytics()` when the admin dashboard loads
+		window.onload = fetchAnalytics;
+	</script>
 </body>
 
 </html>
