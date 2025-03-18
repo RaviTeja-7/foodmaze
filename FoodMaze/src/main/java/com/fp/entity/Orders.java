@@ -1,142 +1,147 @@
 package com.fp.entity;
 
 import java.time.LocalDate;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Orders {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int orderId;
-	private LocalDate orderDate;
-	private String orderCode;
-	private String orderName;
-	private String qty;
-	private double total_amt;
-	private String status;
-	private String customerName;
-	private String customerAddress;
-	private long customerPhone;
-	private int userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int orderId;
+    private LocalDate orderDate;
+    private String orderCode;
+    private String orderName;
+    private String qty;
+    private double total_amt;
 
-	public Orders() {
-	}
+    @Enumerated(EnumType.STRING)  // ✅ Ensures values are stored correctly as plain strings
+    private OrderStatus status;
 
-	public Orders(int orderId, LocalDate orderDate, String orderCode, String orderName, String qty,
-			double total_amt, String status, String customerName, String customerAddress, long customerPhone, int userId) {
-		super();
-		this.orderId = orderId;
-		this.orderDate = orderDate;
-		this.orderCode = orderCode;
-		this.orderName = orderName;
-		this.qty = qty;
-		this.total_amt = total_amt;
-		this.status = status;
-		this.customerName = customerName;
-		this.customerAddress = customerAddress;
-		this.customerPhone = customerPhone;
-		this.userId = userId;
-	}
+    private String customerName;
+    private String customerAddress;
+    private long customerPhone;
+    private int userId;
 
-	public int getOrderId() {
-		return orderId;
-	}
+    public Orders() {
+        this.status = OrderStatus.Pending;  // ✅ Default status when creating an order
+    }
 
-	public void setId(int orderId) {
-		this.orderId = orderId;
-	}
+    public Orders(int orderId, LocalDate orderDate, String orderCode, String orderName, String qty,
+                  double total_amt, OrderStatus status, String customerName, String customerAddress, long customerPhone, int userId) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.orderCode = orderCode;
+        this.orderName = orderName;
+        this.qty = qty;
+        this.total_amt = total_amt;
+        this.status = status;
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
+        this.customerPhone = customerPhone;
+        this.userId = userId;
+    }
 
-	public LocalDate getOrderDate() {
-		return orderDate;
-	}
+    public int getOrderId() {
+        return orderId;
+    }
 
-	public void setOrderDate(LocalDate orderDate) {
-		this.orderDate = orderDate;
-	}
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
 
-	public String getOrderCode() {
-		return orderCode;
-	}
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
 
-	public void setOrderCode(String orderCode) {
-		this.orderCode = orderCode;
-	}
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
+    }
 
-	public String getOrderName() {
-		return orderName;
-	}
+    public String getOrderCode() {
+        return orderCode;
+    }
 
-	public void setOrderName(String orderName) {
-		this.orderName = orderName;
-	}
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
 
-	public String getQty() {
-		return qty;
-	}
+    public String getOrderName() {
+        return orderName;
+    }
 
-	public void setQty(String qty) {
-		this.qty = qty;
-	}
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
+    }
 
-	public double getTotal_amt() {
-		return total_amt;
-	}
+    public String getQty() {
+        return qty;
+    }
 
-	public void setTotal_amt(double total_amt) {
-		this.total_amt = total_amt;
-	}
+    public void setQty(String qty) {
+        this.qty = qty;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public double getTotal_amt() {
+        return total_amt;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setTotal_amt(double total_amt) {
+        this.total_amt = total_amt;
+    }
 
-	public String getCustomerName() {
-		return customerName;
-	}
+    public OrderStatus getStatus() {
+        return status;
+    }
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 
-	public String getCustomerAddress() {
-		return customerAddress;
-	}
+    public String getCustomerName() {
+        return customerName;
+    }
 
-	public void setCustomerAddress(String customerAddress) {
-		this.customerAddress = customerAddress;
-	}
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
-	public int getUserId() {
-		return userId;
-	}
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
 
-	public long getCustomerPhone() {
-		return customerPhone;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public void setCustomerPhone(long customerPhone) {
-		this.customerPhone = customerPhone;
-	}
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
-	@Override
-	public String toString() {
-		return "Order [id=" + orderId + ", orderDate=" + orderDate + ", orderCode=" + orderCode + ", orderName="
-				+ orderName
-				+ ", orderPrice=" + ", qty=" + qty + ", total_amt=" + total_amt + ", status=" + status
-				+ ", customerName=" + customerName + ", customerAddress=" + customerAddress + ", customerPhone="
-				+ customerPhone + "]";
-	}
+    public long getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(long customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    @Override
+    public String toString() {
+        return "Orders [id=" + orderId + ", orderDate=" + orderDate + ", orderCode=" + orderCode + ", orderName="
+                + orderName + ", qty=" + qty + ", total_amt=" + total_amt + ", status=" + status
+                + ", customerName=" + customerName + ", customerAddress=" + customerAddress + ", customerPhone="
+                + customerPhone + "]";
+    }
+
+    // ✅ Embedded Enum for Status
+    public enum OrderStatus {
+        Pending,
+        Completed,
+        Cancelled
+    }
 }
