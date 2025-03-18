@@ -69,6 +69,46 @@
             </div>
         </div>
     </div>
+	<!-- new -->
+	<div class="container text-center">
+	    <h2 class="dashboard-title">Admin Dashboard</h2>
+	    <div class="dashboard-stats">
+	        <div class="stat-card">
+	            <h4>Total Orders</h4>
+	            <p id="totalOrders">0</p>
+	        </div>
+	        <div class="stat-card">
+	            <h4>Total Revenue</h4>
+	            <p id="totalRevenue">$0</p>
+	        </div>
+	        <div class="stat-card">
+	            <h4>Pending Orders</h4>
+	            <p id="pendingOrders">0</p>
+	        </div>
+	        <div class="stat-card">
+	            <h4>Completed Orders</h4>
+	            <p id="completedOrders">0</p>
+	        </div>
+	        <div class="stat-card">
+	            <h4>Cancelled Orders</h4>
+	            <p id="cancelledOrders">0</p>
+	        </div>
+	    </div>
+	</div>
+
+
+
+	    <!-- Charts Section -->
+	    <div class="row chart-container">
+	        <div class="col-md-6">
+	            <canvas id="orderStatusChart"></canvas>
+	        </div>
+	        <div class="col-md-6">
+	            <canvas id="monthlySalesChart"></canvas>
+	        </div>
+	    </div>
+	</div>
+<!--new -->
 
     <div class="container admin-container d-flex justify-content-center">
         <div class="row m-1 p-md-5 p-2 admin-card">

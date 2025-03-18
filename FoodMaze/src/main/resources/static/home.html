@@ -82,25 +82,79 @@
         }
 
         /* cart data at bottom right */
-        .cart-data {
-            position: fixed;
-            width: 100px;
-            border-radius: 10px;
-            bottom: 1rem;
-            right: 1rem;
-        }
+		/* ✅ Cart Floating Button (Minimal & Clean) */
+		.cart-data {
+		    position: fixed;
+		    bottom: 20px;
+		    right: 20px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    background: transparent; /* No extra background */
+		    border-radius: 10px;
+		    padding: 0;
+		    text-align: center;
+		    cursor: pointer;
+		    width: auto;
+		}
 
-        .cart-data span {
-            position: absolute;
-            bottom: 75%;
-            left: 85%;
-            background-color: var(--primary);
-            border-radius: 50%;
-            width: 1.5rem;
-            height: 1.5rem;
-            display: flex;
-            justify-content: center;
-        }
+		/* ✅ Cart Button */
+		.cart-data .add-cart {
+		    background: black;
+		    color: white;
+		    border-radius: 8px;
+		    padding: 8px 12px;
+		    font-size: 14px;
+		    font-weight: bold;
+		    border: none;
+		    cursor: pointer;
+		    transition: background 0.3s ease-in-out;
+		}
+
+		/* ✅ Hover Effect */
+		.cart-data .add-cart:hover {
+		    background: #333;
+		}
+
+		/* ✅ Cart Counter */
+		.cart-data .cart-counter {
+		    position: absolute;
+		    top: -5px;
+		    right: -5px;
+		    background-color: red;
+		    color: white;
+		    border-radius: 50%;
+		    width: 18px;
+		    height: 18px;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    font-size: 12px;
+		    font-weight: bold;
+		    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+		}
+
+		/* ✅ Mobile-Friendly */
+		@media (max-width: 768px) {
+		    .cart-data {
+		        bottom: 15px;
+		        right: 15px;
+		    }
+
+		    .cart-data .add-cart {
+		        font-size: 12px;
+		        padding: 6px 10px;
+		    }
+
+		    .cart-data .cart-counter {
+		        width: 16px;
+		        height: 16px;
+		        font-size: 10px;
+		        top: -4px;
+		        right: -4px;
+		    }
+		}
+
 
         .menu-item {
             width: 100%;
@@ -125,7 +179,19 @@
                     <li><a href="orders.html">Orders</a></li>
                     <li><a href="profile.html">Profile</a></li>
                     <li><a href="logout.html">Logout</a></li>
-                </ul>
+					<li>
+					     
+					            <select id="languageSelect" class="language-dropdown">
+					                <option value="en">🇺🇸 English</option>
+					                <option value="de">🇩🇪 Deutsch</option>
+					                <option value="fr">🇫🇷 Français</option>
+					                <option value="es">🇪🇸 Español</option>
+									<option value="hi">🇮🇳 हिंदी</option>
+									    <option value="te">🇮🇳 తెలుగు</option> 
+					            </select>
+					
+					    </li>
+					</ul>
             </div>
         </div>
     </div>
