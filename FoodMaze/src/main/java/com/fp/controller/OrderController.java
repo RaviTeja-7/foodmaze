@@ -2,9 +2,11 @@ package com.fp.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,9 +52,19 @@ public class OrderController {
 		return orderService.fetchOrderByOrderDate(orderDate);
 	}
 	
-	@PutMapping(value = "/status")
-	public ResponseEntity<String> updateOrderStatus(@RequestHeader(value = "id") int id,
-			@RequestHeader(value = "status") String status) {
-		return orderService.updateOrderStatus(id, status);
+//	@PutMapping(value = "/status")
+//	public ResponseEntity<String> updateOrderStatus(@RequestHeader(value = "id") int id,
+//			@RequestHeader(value = "status") String status) {
+//		return orderService.updateOrderStatus(id, status);
+//	}
+	@PutMapping("/{id}/status")
+	public ResponseEntity<String> updateOrderStatus(@PathVariable int id, @RequestBody String status) {
+	    return orderService.updateOrderStatus(id, status.trim().replace("\"", ""));
 	}
+	//  new
+	@GetMapping("/analytics")
+	public ResponseEntity<Map<String, Object>> getAnalytics() {
+	    return orderService.getOrderAnalytics();
+	}
+
 }
